@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: rooaak-slack-adapter-starter
+    runtime: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: PORT
+        value: 8787
+      - key: ROOAAK_API_KEY
+        sync: false
+      - key: ROOAAK_WEBHOOK_SECRET
+        sync: false
+      - key: ROOAAK_AGENT_ID
+        sync: false
+      - key: SLACK_SIGNING_SECRET
+        sync: false
+      - key: SLACK_BOT_TOKEN
+        sync: false
