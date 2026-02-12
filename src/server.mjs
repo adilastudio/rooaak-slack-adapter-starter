@@ -52,6 +52,14 @@ app.post("/webhooks/slack/events", express.raw({ type: "application/json" }), as
     return;
   }
 
+  console.log("[slack-starter] received slack event", {
+    eventId: payload.event_id,
+    eventType: payload?.event?.type,
+    channelId: payload?.event?.channel,
+    messageTs: payload?.event?.ts,
+    threadTs: payload?.event?.thread_ts,
+  });
+
   res.status(200).json({ ok: true });
 
   if (typeof payload.event_id !== "string" || seenSlackEvents.has(payload.event_id)) {
@@ -89,10 +97,22 @@ app.post("/webhooks/slack/events", express.raw({ type: "application/json" }), as
       await postSlackMessage({
         botToken: env.SLACK_BOT_TOKEN,
         channelId: inbound.channelId,
-        threadTs: inbound.threadTs,
+        threadTs: inbound.threadTs || undefined,
         text: sendResult.response,
       });
+      console.log("[slack-starter] posted fast-path reply", {
+        eventId: inbound.eventId,
+        channelId: inbound.channelId,
+        threadTs: inbound.threadTs || null,
+      });
+      return;
     }
+
+    console.log("[slack-starter] queued async reply via rooaak webhook", {
+      eventId: inbound.eventId,
+      messageId: sendResult.messageId,
+      status: sendResult.status,
+    });
   } catch (error) {
     console.error("[slack-starter] inbound handling failed", {
       eventId: payload.event_id,
@@ -160,6 +180,12 @@ app.post("/webhooks/rooaak", express.raw({ type: "application/json" }), async (r
       channelId,
       threadTs: threadTs || undefined,
       text: message.response,
+    });
+
+    console.log("[slack-starter] posted async reply", {
+      messageId,
+      channelId,
+      threadTs: threadTs || null,
     });
 
     res.status(200).json({ ok: true });

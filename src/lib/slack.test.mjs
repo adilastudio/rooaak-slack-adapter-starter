@@ -66,7 +66,7 @@ test("parseSlackInboundEvent maps message callback", () => {
     text: "hello",
     channelId: "C123",
     messageTs: "1700000000.123",
-    threadTs: "1700000000.123",
+    threadTs: "",
     userId: "U123",
     sessionId: "slack:C123:1700000000.123",
   });

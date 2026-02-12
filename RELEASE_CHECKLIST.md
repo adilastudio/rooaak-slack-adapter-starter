@@ -19,18 +19,19 @@
 
 - [x] Health endpoint responds (`/healthz`)
 - [x] Webhook routes reachable via HTTPS
-- [ ] Slack app subscription URL points to deployed host
+- [x] Slack app subscription URL points to deployed host
 - [x] Rooaak webhook registered for `message.responded`
 
 ## Release ops
 
 - [x] Tag release (`v0.1.0`)
 - [x] Publish changelog entry
-- [ ] Smoke test with real Slack workspace
+- [x] Smoke test with real Slack workspace
 
 ## Verification notes (2026-02-12)
 
 - Local checks passed: install, tests, syntax, and `/healthz`.
 - Deployed webhook routes are live over HTTPS and return expected auth errors when unsigned (`/webhooks/slack/events`, `/webhooks/rooaak`).
 - Rooaak webhook is registered for `message.responded` at `https://rooaak-slack-adapter-starter.fly.dev/webhooks/rooaak` (id: `cd10d384-13af-4968-a273-bdeb1eab7bb3`).
-- Remaining unchecked items require Slack app callback configuration + live workspace smoke test.
+- Slack Event Subscriptions callback now points to `https://rooaak-slack-adapter-starter.fly.dev/webhooks/slack/events`.
+- Live workspace smoke passed in channel `#ai` with bot mention and successful response posted back to Slack.

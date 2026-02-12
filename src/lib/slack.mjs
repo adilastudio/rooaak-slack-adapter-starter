@@ -40,10 +40,10 @@ export function parseSlackInboundEvent(payload) {
   const text = typeof event.text === "string" ? event.text.trim() : "";
   const channelId = String(event.channel || "");
   const messageTs = String(event.ts || "");
-  const threadTs = String(event.thread_ts || event.ts || "");
+  const threadTs = typeof event.thread_ts === "string" ? event.thread_ts : "";
   const userId = String(event.user || "");
 
-  if (!text || !channelId || !threadTs) {
+  if (!text || !channelId || !messageTs) {
     return null;
   }
 
@@ -54,6 +54,6 @@ export function parseSlackInboundEvent(payload) {
     messageTs,
     threadTs,
     userId,
-    sessionId: `slack:${channelId}:${threadTs}`,
+    sessionId: `slack:${channelId}:${threadTs || messageTs}`,
   };
 }
